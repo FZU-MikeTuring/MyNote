@@ -116,6 +116,50 @@ jdbc.pwd=pzl945464
 
 
 
+## xml文件
+
+> 核心配置文件
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="com.tur.pojo.User" alias="User"/>
+    </typeAliases>
+</configuration>
+```
+
+
+
+> mapper实现方法的文件
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tur.mapper.user.UserMapper">
+    <resultMap id="ToUser" type="User">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="psd" column="psw"/>
+    </resultMap>
+    <select id="getUserById" resultMap="ToUser">
+        select * from user
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+        </where>
+    </select>
+</mapper>
+```
+
+
+
 ## 获取sqlSessionFactory的工具类
 
 
