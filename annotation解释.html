@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annotation（注解）详解</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .annotation-icon {
+            font-size: 3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .content-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .content-section p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .content-section ul, .content-section ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .content-section li {
+            margin-bottom: 10px;
+        }
+        
+        .code-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-example h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .code-comment {
+            color: #95a5a6;
+        }
+        
+        .annotation {
+            color: #e74c3c;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .comparison-table tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        
+        .comparison-table tr:last-of-type {
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .use-case {
+            background: #e8f4fc;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .use-case h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .use-case i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .use-cases {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="annotation-icon">
+                <i class="fas fa-sticky-note"></i>
+            </div>
+            <h1>Annotation（注解）详解</h1>
+            <p>了解编程中注解的概念、用途和实际应用</p>
+        </header>
+        
+        <div class="content-section">
+            <h2>什么是Annotation？</h2>
+            <p><strong>Annotation（注解）</strong>是一种为程序元素（类、方法、变量等）添加元数据的机制。它提供了一种形式化的方法，用于向代码中添加信息，这些信息可以在编译时或运行时被处理。</p>
+            
+            <p>注解本身不会直接影响代码的逻辑，但它们可以被编译器、开发工具或运行时环境使用，以生成代码、进行验证或执行其他任务。</p>
+        </div>
+        
+        <div class="content-section">
+            <h2>注解的主要用途</h2>
+            <ul>
+                <li><strong>编译器信息</strong> - 提供给编译器检查代码或生成额外代码</li>
+                <li><strong>编译时处理</strong> - 在编译时生成代码、配置文件等</li>
+                <li><strong>运行时处理</strong> - 在运行时通过反射读取注解信息并执行相应操作</li>
+                <li><strong>文档生成</strong> - 为代码生成文档提供额外信息</li>
+                <li><strong>代码分析</strong> - 帮助开发工具分析代码结构和依赖关系</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>注解示例（Java）</h2>
+            <div class="code-example">
+                <h3>内置注解示例</h3>
+                <pre><code><span class="code-comment">// 重写父类方法</span>
+<span class="annotation">@Override</span>
+public String toString() {
+    return "This is an example";
+}
+
+<span class="code-comment">// 抑制编译器警告</span>
+<span class="annotation">@SuppressWarnings</span>("unchecked")
+public void exampleMethod() {
+    // 一些代码
+}
+
+<span class="code-comment">// 标记方法已弃用</span>
+<span class="annotation">@Deprecated</span>
+public void oldMethod() {
+    // 旧方法实现
+}</code></pre>
+            </div>
+            
+            <div class="code-example">
+                <h3>自定义注解示例</h3>
+                <pre><code><span class="code-comment">// 定义自定义注解</span>
+<span class="annotation">@interface</span> Author {
+    String name();
+    String date();
+    int version() default 1;
+}
+
+<span class="code-comment">// 使用自定义注解</span>
+<span class="annotation">@Author</span>(name = "John Doe", date = "2023-10-20", version = 2)
+public class MyClass {
+    <span class="annotation">@Author</span>(name = "John Doe", date = "2023-10-21")
+    public void myMethod() {
+        // 方法实现
+    }
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>注解 vs 注释</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>特性</th>
+                        <th>注解 (Annotation)</th>
+                        <th>注释 (Comment)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>用途</td>
+                        <td>为代码添加元数据，可以被工具或运行时环境处理</td>
+                        <td>为开发人员提供代码解释，不会被程序处理</td>
+                    </tr>
+                    <tr>
+                        <td>语法</td>
+                        <td>以@符号开头，如@Override</td>
+                        <td>使用//、/* */或/** */</td>
+                    </tr>
+                    <tr>
+                        <td>处理方式</td>
+                        <td>可以被编译器、工具或运行时环境读取和处理</td>
+                        <td>在编译时被忽略，不会包含在最终程序中</td>
+                    </tr>
+                    <tr>
+                        <td>内容</td>
+                        <td>结构化数据，可以包含命名元素</td>
+                        <td>自由格式的文本</td>
+                    </tr>
+                    <tr>
+                        <td>影响</td>
+                        <td>可能影响编译过程或运行时行为</td>
+                        <td>不影响程序行为，仅供人类阅读</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="content-section">
+            <h2>常见注解使用场景</h2>
+            <div class="use-cases">
+                <div class="use-case">
+                    <h3><i class="fas fa-code"></i> Spring框架</h3>
+                    <p>Spring框架广泛使用注解进行依赖注入和配置，如@Autowired、@Component、@Service等。</p>
+                </div>
+                
+                <div class="use-case">
+                    <h3><i class="fas fa-database"></i> JPA/Hibernate</h3>
+                    <p>对象关系映射(ORM)框架使用注解如@Entity、@Table、@Column来映射Java对象到数据库表。</p>
+                </div>
+                
+                <div class="use-case">
+                    <h3><i class="fas fa-check-circle"></i> 测试框架</h3>
+                    <p>JUnit等测试框架使用注解如@Test、@Before、@After来标识测试方法和设置测试环境。</p>
+                </div>
+                
+                <div class="use-case">
+                    <h3><i class="fas fa-lock"></i> 权限控制</h3>
+                    <p>使用注解如@Secured、@PreAuthorize进行方法级别的权限控制和访问限制。</p>
+                </div>
+                
+                <div class="use-case">
+                    <h3><i class="fas fa-tools"></i> 代码生成</h3>
+                    <p>注解处理器可以在编译时生成代码，减少样板代码的编写，如Lombok库的@Data、@Getter等。</p>
+                </div>
+                
+                <div class="use-case">
+                    <h3><i class="fas fa-file-alt"></i> 文档生成</h3>
+                    <p>Swagger等工具使用注解如@ApiOperation、@ApiParam来自动生成API文档。</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Annotation（注解）详解 | 编程概念学习资源</p>
+        </footer>
+    </div>
+</body>
+</html>

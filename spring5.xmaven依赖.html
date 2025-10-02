@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring 5.x Maven依赖管理器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .spring-logo {
+            font-size: 3rem;
+            color: #68bd45;
+            margin-bottom: 15px;
+        }
+        
+        .dependencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .dependency-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dependency-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dependency-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #68bd45;
+        }
+        
+        .dependency-card p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .dependency-card pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .copy-btn {
+            background: #68bd45;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #5aa837;
+        }
+        
+        .config-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .config-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .pom-config {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        
+        .notes {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        
+        .notes h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .notes ul {
+            padding-left: 20px;
+        }
+        
+        .notes li {
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .dependencies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="spring-logo">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1>Spring 5.x Maven依赖管理器</h1>
+            <p>查找和使用Spring 5.x的核心Maven依赖项</p>
+        </header>
+        
+        <div class="dependencies-grid">
+            <div class="dependency-card">
+                <h3>Spring Core</h3>
+                <p>Spring框架的核心工具，包含控制反转(IoC)和依赖注入(DI)</p>
+                <div class="code-header">
+                    <span>Maven依赖:</span>
+                    <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                </div>
+                <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+    &lt;version&gt;5.3.23&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+            </div>
+            
+            <div class="dependency-card">
+                <h3>Spring Context</h3>
+                <p>基于Core构建的应用程序上下文，提供企业级服务</p>
+                <div class="code-header">
+                    <span>Maven依赖:</span>
+                    <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                </div>
+                <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+    &lt;version&gt;5.3.23&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+            </div>
+            
+            <div class="dependency-card">
+                <h3>Spring Web MVC</h3>
+                <p>用于构建Web应用程序的MVC框架</p>
+                <div class="code-header">
+                    <span>Maven依赖:</span>
+                    <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                </div>
+                <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+    &lt;version&gt;5.3.23&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+            </div>
+            
+            <div class="dependency-card">
+                <h3>Spring Data JPA</h3>
+                <p>简化基于JPA的数据访问层的实现</p>
+                <div class="code-header">
+                    <span>Maven依赖:</span>
+                    <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                </div>
+                <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.data&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-data-jpa&lt;/artifactId&gt;
+    &lt;version&gt;2.7.5&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+            </div>
+            
+            <div class="dependency-card">
+                <h3>Spring Security</h3>
+                <p>提供身份验证和授权功能的安全框架</p>
+                <div class="code-header">
+                    <span>Maven依赖:</span>
+                    <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                </div>
+                <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.security&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-security-web&lt;/artifactId&gt;
+    &lt;version&gt;5.7.5&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+            </div>
+            
+            <div class="dependency-card">
+                <h3>Spring Boot Starter</h3>
+                <p>Spring Boot的快速启动依赖，包含自动配置</p>
+                <div class="code-header">
+                    <span>Maven依赖:</span>
+                    <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                </div>
+                <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;version&gt;2.7.5&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+            </div>
+        </div>
+        
+        <div class="config-section">
+            <h2>Maven配置示例</h2>
+            <p>完整的pom.xml配置示例：</p>
+            <div class="pom-config">
+                <pre><code>&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-demo&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+    
+    &lt;properties&gt;
+        &lt;spring.version&gt;5.3.23&lt;/spring.version&gt;
+        &lt;spring.security.version&gt;5.7.5&lt;/spring.security.version&gt;
+        &lt;spring.data.version&gt;2.7.5&lt;/spring.data.version&gt;
+    &lt;/properties&gt;
+    
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.data&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-data-jpa&lt;/artifactId&gt;
+            &lt;version&gt;${spring.data.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.security&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-security-web&lt;/artifactId&gt;
+            &lt;version&gt;${spring.security.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/project&gt;</code></pre>
+            </div>
+            
+            <div class="notes">
+                <h3>使用说明</h3>
+                <ul>
+                    <li>确保使用与Spring 5.x兼容的依赖版本</li>
+                    <li>Spring Boot可以简化版本管理，通过starter parent自动管理版本</li>
+                    <li>建议使用Maven的properties部分定义版本号，便于统一管理</li>
+                    <li>某些Spring项目可能需要额外的依赖（如Spring Security Config）</li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Spring 5.x Maven依赖参考 | 版本号仅供参考，请根据实际需求选择</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.parentElement.nextElementSibling;
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // 显示复制成功反馈
+            const originalText = button.textContent;
+            button.textContent = '已复制!';
+            button.style.background = '#28a745';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '#68bd45';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
