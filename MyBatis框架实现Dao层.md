@@ -348,7 +348,7 @@ logger.debug("");
 
 ## 配置别名
 
-
+> 别名对mapper.xml文件的namespace处无效，也就是说namspace处还需要用完整的路径
 
 ```xml
 <typeAliases>
