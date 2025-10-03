@@ -106,7 +106,7 @@
         http://www.springframework.org/schema/aop
         https://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/tx
-        https://www.springframework.org/schema/tx /spring-tx.xsd">
+        https://www.springframework.org/schema/tx/spring-tx.xsd">
     <!--bean标签实现装配-->
 </beans>
 ```
