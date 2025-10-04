@@ -121,6 +121,20 @@
 
 ## web.xml
 
+> 这里用 / 而不是 /* 是因为
+>
+> / 不可以识别.jsp的请求
+>
+> /*可以识别.jsp的请求
+>
+> 由于springmvc-servlet.xml配置文件中配置后缀“.jsp”
+>
+> 如果请求允许是.jsp后缀，那么就会陷入加.jsp的死循环
+>
+> 而如果用 / 在第一次加完.jsp后，第二次就不会再执行servlet请求
+
+### 基础版
+
 ```xml
 <!DOCTYPE web-app PUBLIC
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
@@ -149,7 +163,38 @@
 
 
 
+### 最新版web.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springmvc-servlet.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>
+```
+
+
+
+
+
 ## springmvc-serlvet.xml
+
+### 基础版
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -170,5 +215,94 @@
 	<!--这里要记得注册HelloController-->
     <bean id="/hello" class="com.tur.controller.HelloController"/>
 </beans>
+```
+
+
+
+### 注解版
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--bean标签实现装配-->
+    <context:component-scan base-package="com.tur.controller"/>
+    <mvc:default-servlet-handler/>
+    <mvc:annotation-driven/>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="internalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>
+```
+
+
+
+
+
+## Controller类
+
+### 基础版
+
+```java
+package com.tur.controller;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class HelloController implements Controller {
+    @Override
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("message", "Hello World");
+        mv.setViewName("hello");
+        return mv;
+    }
+}
+
+```
+
+
+
+
+
+### 注解版
+
+> @Controller 表示将这个类由spring自动装配，相当于在bean配置文件中写了一个bean标签
+>
+> @RequestMapping("/hello") 表示这个函数匹配的客户请求(被HandlerMapping自动查找到的)
+>
+> 以下的函数执行完后在springmvc-servlet.xml文件中去得到完整的路径再转给DispatcherServlet去展现画面
+
+```java
+package com.tur.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class MyController {
+
+    @RequestMapping("/hello")
+    public String hello(Model model){
+        //Service操作
+        String result="Hello world!";
+        //装包
+        model.addAttribute("msg",result);
+        return "hello";
+    }
+}
 ```
 
