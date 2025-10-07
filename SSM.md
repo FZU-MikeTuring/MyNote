@@ -218,18 +218,6 @@ jdbc.password=pzl945464
     <bean class="org.mybatis.spring.SqlSessionTemplate" id="SqlSession">
         <constructor-arg index="0" ref="SqlSessionFactory"/>
     </bean>
-<!--配置事务-->
-    <bean id="TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-    <tx:advice id="txAdvice" transaction-manager="TransactionManager">
-        <tx:attributes>
-            <tx:method name="*" propagation="REQUIRED"/>
-        </tx:attributes>
-    </tx:advice>
-    <aop:config>
-        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.tur.dao.*.*(..))"/>
-    </aop:config>
 </beans>
 ```
 
@@ -252,8 +240,20 @@ jdbc.password=pzl945464
         https://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/tx
         https://www.springframework.org/schema/tx/spring-tx.xsd">
-    <!--bean标签实现装配-->
+    <import resource="spring-mapper.xml"/>
     <context:component-scan base-package="com.tur.service"/>
+    <!--配置事务-->
+    <bean id="TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="TransactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.tur.service.*.*(..))"/>
+    </aop:config>
 </beans>
 ```
 
@@ -448,6 +448,7 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 ```java
 @RestController
 	@RequestMapping("/add") //请求路径
+	@PathVariable("bookID")
 
 @Service("BookService")   //参数是bean的id
 	@Autowired //自动注入
@@ -456,6 +457,58 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 @Repository("BookMapper")
 	@Autowired //自动注入
     @Qualifier("BookMapper")//引用bean的id
+```
+
+
+
+## 拦截器(Interceptor)
+
+需要在springmvc中加入拦截器的配置
+
+```xml
+	<mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.tur.inteceptors.MyInteceptor" id="inteceptor01"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+```
+
+需要写一个实现HandlerInterceptor的类
+
+
+
+return true表示不拦截，false表示拦截，禁止通行
+
+```java
+package com.tur.inteceptors;
+
+import org.springframework.lang.Nullable;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class MyInteceptor implements HandlerInterceptor {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        HttpSession session = request.getSession();
+        if(request.getRequestURI().contains("login")
+        ||session.getAttribute("user") != null) {
+            return true;
+        }
+        System.out.println("被拦截了");
+        return false;
+    }
+
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
+    }
+
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
+    }
+}
+
 ```
 
 
